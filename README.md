@@ -19,4 +19,8 @@ Para correr los tests desde la terminal, utiliza el siguiente comando de Maven:
 ```bash
 mvn test
 ```
+
+### 💡 Decisiones de Arquitectura
+* **Test Independence:** Cada prueba genera sus propios datos de entrada. Esto garantiza que los fallos no se propaguen en cascada y facilita el debugging.
+* **Service Layer:** Toda la interacción con la API está encapsulada en `BookingService`, permitiendo que los tests se enfoquen únicamente en las aserciones de negocio.
 Autor: Juan Cruz Mogica - QA Automation Engineer
