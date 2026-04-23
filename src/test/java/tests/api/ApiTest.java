@@ -55,6 +55,56 @@ public class ApiTest {
             assertTrue(responseGet.text().contains("Juan"));
         }
 
+        @Test
+        @DisplayName("Actualizar una reserva existente")
+        void updateBookingTest() {
+            BookingService bookingService = new BookingService(request);
+
+            // 1. Crear reserva inicial
+            Map<String, Object> bodyInicial = createPayload("Juan", "Original");
+            APIResponse responseCreate = bookingService.createBooking(bodyInicial);
+            int bookingId = com.google.gson.JsonParser.parseString(responseCreate.text())
+                    .getAsJsonObject().get("bookingid").getAsInt();
+
+            // 2. Preparar datos para actualizar (Cambiamos el apellido y precio)
+            Map<String, Object> bodyUpdate = createPayload("Juan", "Actualizado");
+            bodyUpdate.put("totalprice", 500);
+
+            // 3. Ejecutar Update
+            APIResponse responseUpdate = bookingService.updateBooking(bookingId, bodyUpdate);
+
+            // 4. Validaciones
+            assertEquals(200, responseUpdate.status());
+            assertTrue(responseUpdate.text().contains("Actualizado"));
+            assertTrue(responseUpdate.text().contains("500"));
+        }
+
+        @Test
+        @DisplayName("Eliminar una reserva recién creada")
+        void deleteBookingTest() {
+            BookingService bookingService = new BookingService(request);
+
+            // 1. Primero creamos una para tener algo que borrar
+            Map<String, Object> body = createPayload("Juan", "ToDelete");
+            APIResponse responseCreate = bookingService.createBooking(body);
+
+            // Extraemos el ID
+            int bookingId = com.google.gson.JsonParser.parseString(responseCreate.text())
+                    .getAsJsonObject().get("bookingid").getAsInt();
+
+            // 2. Ejecutamos el DELETE
+            // Usamos el token básico que acepta la API por defecto
+            APIResponse responseDelete = request.delete("/booking/" + bookingId, RequestOptions.create()
+                    .setHeader("Authorization", "Basic YWRtaW46cGFzc3dvcmQxMjM="));
+
+            // 3. Validaciones
+            assertEquals(201, responseDelete.status(), "El status debería ser 201 Created para delete");
+
+            // 4. Verificación extra: Intentar buscarla y que de 404
+            APIResponse responseGet = bookingService.getBooking(bookingId);
+            assertEquals(404, responseGet.status(), "La reserva no debería existir más");
+        }
+
         //
         private Map<String, Object> createPayload(String firstName, String lastName) {
             Map<String, Object> body = new HashMap<>();

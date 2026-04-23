@@ -22,6 +22,12 @@ public class BookingService {
         return request.get("/booking/" + id);
     }
 
+    public APIResponse updateBooking(int id, Map<String, Object> payload) {
+        return request.put("/booking/" + id, RequestOptions.create()
+                .setData(payload)
+                .setHeader("Authorization", "Basic YWRtaW46cGFzc3dvcmQxMjM="));
+    }
+
     // DELETE (Requiere un Token o Auth, pero para el ejemplo básico:)
     public APIResponse deleteBooking(int id) {
         return request.delete("/booking/" + id, RequestOptions.create()
