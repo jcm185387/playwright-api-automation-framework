@@ -1,0 +1,32 @@
+# --- Java & Maven ---
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# --- IntelliJ IDEA ---
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# --- Playwright Specific ---
+# Si llegas a usar reportes o trazas de Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.local-browsers/
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+
+# --- Log files ---
+*.log
